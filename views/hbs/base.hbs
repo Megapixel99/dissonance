@@ -1,0 +1,290 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="utf-8">
+    <title>Dissonance</title>
+    <link href="/css/root.css" rel="stylesheet" />
+    <link href="/css/main.css" rel="stylesheet" />
+    <script src="/socket.io/socket.io.js"></script>
+    <script src="/js/jquery-3.6.0.min.js"></script>
+  </head>
+  <body>
+    <div class="server-list">
+      <input type="button" class="server-icon" style='background-image: url("/img/5ccabf62108d5a8074ddd95af2211727.png");' onclick="changeView('@me')"/>
+      <div class="server-div" > </div>
+      <div id="server-list" class="server-list-scroll">
+        {{#each servers}}
+          <input type="button" class="server-icon" style='background-image: url("/img/986-200x200.jpg");' onclick="changeView({{this.id}})"/>
+        {{/each}}
+      </div>
+      <div class="server-div" > </div>
+        <input type="button" class="server-icon bottom" value="&#43;" onclick="newServerInfo()"/>
+    </div>
+    <div class="info-bar">
+      <div id="server-info" class="server-info">
+        {{serverName}}
+      </div>
+      <div id="channel-name" style="position: absolute; left: 360px; top: 15px;">
+      </div>
+      <div id="new-user">
+        <div class="add-user">
+          <input type="button" onclick="getInvite()" onmouseover="showTooltip()" onmouseout="hideTooltip()" style="background-color: transparent; border: none; width: 25px; height: 25px;">
+        </div>
+        <span id="invite-tooltip" class="tooltip-ex-text tooltip-ex-bottom">Generate new invite link</span>
+      </div>
+    </div>
+    <div class="channel">
+      <div id="channel-list" class="left-bar">
+        {{#each channels}}
+          <input class="channel-link" id="{{this.id}}" type="button" value="#  {{this.name}}" onclick="changeView(serverId, {{this.id}})">
+        {{/each}}
+      </div>
+      <div id="main-content" class="main-content">
+      </div>
+      <div class="input-container">
+        <div class="text-container">
+          <input class="text-input" id="text-input" type="text" value="">
+        </div>
+      </div>
+      <div class="user-list" id="user-list">
+        <div class="user-info">
+          {{#each users}}
+          <div style="height: inherit;">
+            <div class="user-icon-list">
+              <img src="{{this.profile.picture}}" style="width: inherit; height: inherit; border-radius: inherit; border: white 1px solid;">
+              <span id="{{this.id}}-active-dot" class="dot"></span>
+            </div>
+            {{#if this.profile.status}}
+            <div style="display: initial; position: absolute;">
+              <p style="font-size: 16px; margin-top: 5px; margin-bottom: 0;">{{this.profile.username}}</p>
+              <p style="font-size: 10px; margin: 0px;">{{this.profile.status}}</p>
+            </div>
+            {{else}}
+            <p style="display: initial; position: absolute; font-size: 16px;">{{this.profile.username}}</p>
+            {{/if}}
+          </div>
+          {{/each}}
+        </div>
+      </div>
+    </div>
+  </body>
+  <script>
+    const socket = io();
+    let user;
+    let activeUserIds = [];
+    let serverId;
+    let channelId;
+    {{#if serverId}}
+    serverId = "{{serverId}}";
+    {{/if}}
+    {{#if channelId}}
+    channelId = "{{channelId}}";
+    {{/if}}
+    function hide(e){
+      if (e.id === 'new-server-bg') {
+        e.style.visibility = "hidden";
+      }
+    }
+    function preview_image(event)
+    {
+     let reader = new FileReader();
+     reader.onload = function() {
+      let output = document.getElementById('icon-upload');
+      output.style['border-radius'] = '96px';
+      output.src = reader.result;
+     }
+     reader.readAsDataURL(event.target.files[0]);
+    }
+    function getInvite() {
+    $.ajax({
+      url: `/create/invite/${serverId}/${channelId}`,
+      type: 'POST',
+      success: function (data) {
+        navigator.clipboard.writeText(data)
+        .then(() => {
+          document.getElementById('invite-tooltip').innerHTML = "Copied new invite link to clipboard";
+        })
+        .catch(err => {
+          document.getElementById('invite-tooltip').innerHTML = "Error while copying new invite link";
+        });
+      },
+    });
+    }
+    function newServerInfo() {
+    // document.getElementsByTagName('body')[0].innerHTML += `<div id="new-server-bg" style="width: 100%; height: 100%; background-color: rgba(0,0,0,0.75);position: absolute;top: 0;left: 0;" onclick="hide(this)">
+    //   <div class="new-server">
+    //     <p style="font-size: 21px; color: black; font-weight: 700;">Create a new Server</p>
+    //     <p style="width: 334px;">Customize your server with a name and an icon. You might be able to change it later.</p>
+    //     <div style="display: flex; justify-content: center;">
+    //       <div style="position: relative;">
+    //         <img id="icon-upload" src="https://pic.onlinewebfonts.com/svg/img_234957.png" style="height: 96px; position: relative; width: 96px;">
+    //         <input type="file" accept="image/*" onchange="preview_image(event)" style="opacity: 0; position: absolute; top: 0px; left: 0px; width: 96px; height: 96px; cursor: pointer">
+    //       </div>
+    //     </div>
+    //     <p>Server Name</p>
+    //     <input class="new-sever-name" type="text" value="${user.info.profile.username}'s server'">
+    //     <div class="new-server-confirm">
+    //       <input type="button" value="Create Server" onclick="function hi(){console.log('hi');}">
+    //     </div>
+    //   </div>
+    // </div>`;
+    }
+    function newServer() {
+    $.ajax({
+      url: `/create/server`,
+      type: 'POST',
+      success: function (data) {
+        navigator.clipboard.writeText(data)
+        .then(() => {
+          document.getElementById('invite-tooltip').innerHTML = "Copied new invite link to clipboard";
+        })
+        .catch(err => {
+          document.getElementById('invite-tooltip').innerHTML = "Error while copying new invite link";
+        });
+      },
+    });
+    }
+    function showTooltip() {
+      document.getElementById('invite-tooltip').innerHTML = "Generate new invite link";
+      document.getElementById('invite-tooltip').style.opacity = 1;
+    }
+    function hideTooltip() {
+      document.getElementById('invite-tooltip').style.opacity = 0;
+    }
+    function newMessage(userProfile, message) {
+      return `<div class="message">
+        <div class="user-icon" >
+          <img src=${userProfile.picture}>
+        </div>
+        <div class="text">
+          <div class="username">
+            ${userProfile.username}
+          </div>
+          <div class="user-text">
+            ${message}
+          </div>
+        </div>
+      </div>`;
+    }
+    function setUpChannels(_serverId) {
+      document.getElementById('user-list').innerHTML = "";
+      if (serverId !== "@me") {
+      $.ajax({
+        url: `/server/${_serverId}`,
+        type: 'GET',
+        success: function (data) {
+          document.getElementById('server-info').innerHTML = data.server.name;
+          document.getElementById('channel-list').innerHTML = "";
+          for (let i = 0; i < data.server.channels.length; i++) {
+            document.getElementById('channel-list').innerHTML +=
+            `<input class="channel-link" type="button" id="${data.server.channels[i].id}" value="#  ${data.server.channels[i].name}" onclick="changeView(${_serverId}, ${data.server.channels[i].id})">`
+          }
+          for (let i = 0; i < data.users.length; i++) {
+            document.getElementById('user-list').innerHTML +=
+            `<div class="user-info">
+                <div style="height: inherit;">
+                <div class="user-icon-list">
+                  <img src="${data.users[i].profile.picture}" style="width: inherit; height: inherit; border-radius: inherit; border: white 1px solid;">
+                  <span id="${data.users[i].id}-active-dot" class="dot" ${activeUserIds.includes(data.users[i].id) ? 'style="background-color: aqua"':''}></span>
+                </div>
+                ${data.users[i].profile.status ? `<div style="display: initial; position: absolute;">
+                  <p style="font-size: 16px; margin-top: 5px; margin-bottom: 0;">${data.users[i].profile.username}</p>
+                  <p style="font-size: 10px; margin: 0px;">${data.users[i].profile.status}</p>
+                </div>` : `<p style="display: initial; position: absolute; font-size: 16px; line-height: 10px;">${data.users[i].profile.username}</p>`
+                }
+              </div>
+            </div>`
+          }
+        },
+      });
+    } else {
+    }
+    }
+    function setUpView(_serverId, _channelId) {
+      if (serverId !== "@me") {
+      if (user.servers.some((e) => e.id === Number(_serverId))) {
+        $.ajax({
+          url: `/channels/${_serverId}/${_channelId}/messages`,
+          type: 'GET',
+          success: function (data) {
+            document.getElementById('main-content').innerHTML = "";
+            for (let i = 0; i < data.length; i++) {
+              document.getElementById('main-content').innerHTML +=
+              newMessage(data[i], data[i].message);
+            }
+            let div = document.getElementById("main-content");
+            div.scrollTop = div.scrollHeight;
+          },
+        });
+      }
+    }
+    }
+    function changeView(_serverId, _channelId) {
+      channelId = _channelId;
+      document.getElementById('main-content').innerHTML = "";
+      if (serverId === _serverId) {
+        setUpView(_serverId, _channelId);
+      } else {
+        document.getElementById('channel-list').innerHTML = "";
+        serverId = _serverId;
+        setUpChannels(_serverId);
+        setUpView(_serverId, _channelId);
+      }
+      if (serverId === '@me' || channelId === undefined) {
+        document.getElementById('new-user').style.visibility = "hidden";
+        if (serverId === '@me') {
+          document.getElementById('server-info').innerHTML = '<input class="dm-search-bar text-input" type="text" placeholder="Find a conversation">';
+        }
+        document.getElementById('channel-name').innerHTML = "";
+        window.history.pushState({}, '', `/channels/${serverId}`)
+      } else {
+        document.getElementById('channel-name').innerHTML = document.getElementById(channelId).value;
+        document.getElementById('new-user').style.visibility = "visible";
+        window.history.pushState({}, '', `/channels/${serverId}/${channelId}`)
+      }
+    }
+    socket.on("connect", () => {
+      document.querySelector('#text-input').addEventListener('keypress', function (e) {
+        if (e.key === 'Enter') {
+          socket.emit("message", {
+            serverId,
+            channelId,
+            sender: user.info.id,
+            message: document.querySelector('#text-input').value,
+          });
+          document.querySelector('#text-input').value = "";
+        }
+      });
+      socket.on('new user connected', (_user) => {
+        if (serverId !== "@me") {
+          activeUserIds.push(_user.id);
+          document.getElementById(`${_user.id}-active-dot`).style['background-color'] = 'aqua';
+        }
+      });
+      socket.on('user disconnected', (_user) => {
+        if (serverId !== "@me") {
+          activeUserIds = activeUserIds.filter(e => e !== _user.id);
+          document.getElementById(`${_user.id}-active-dot`).style['background-color'] = '#bbb';
+        }
+      });
+      socket.on('user info', (data) => {
+        user = {
+          servers: data.servers,
+          info: data.info,
+        };
+        changeView(serverId, channelId)
+        for (let i = 0; i < data.users.length; i++) {
+          activeUserIds.push(data.users[i].id);
+          if (document.getElementById(`${data.users[i].id}-active-dot`)) {
+            document.getElementById(`${data.users[i].id}-active-dot`).style['background-color'] = 'aqua';
+          }
+        }
+        socket.on('message', (data) => {
+          let div = document.getElementById("main-content");
+          div.innerHTML += newMessage(data.user.info.profile, data.message);
+          div.scrollTop = div.scrollHeight;
+        });
+      });
+    });
+  </script>
+</html>

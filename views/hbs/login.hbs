@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="utf-8">
+    <title>Dissonance</title>
+    <link href="/css/root.css" rel="stylesheet" />
+    <link href="/css/login.css" rel="stylesheet" />
+  </head>
+  <body>
+    <div class="login">
+      <h1>Welcome Back!</h1>
+      <p>We're so excited to see you again!</p>
+      <div class="box">
+        <p>EMAIL</p>
+        <input id="email" type="email" value="">
+        <p>PASSWORD</p>
+        <input id="password" type="password" value="">
+        <p class="link"><a href="#">Forgot your password?</a></p>
+        <input type="button" value="LOGIN" onclick="login()">
+        <p class="link"><a href="/register?redirect={{redirect}}">Register for an account</a></p>
+      </div>
+    </div>
+  </body>
+  <script src="https://code.jquery.com/jquery-3.4.1.min.js" crossorigin="anonymous"></script>
+  <script type="text/javascript">
+    function login() {
+      $.ajax({
+        url: "/login",
+        type: 'POST',
+        data: {
+          "email": document.getElementById('email').value,
+          "password": document.getElementById('password').value,
+        },
+        success: function () {
+          location.pathname = '{{redirect}}'
+        },
+        error: function (err) {
+          console.log(err);
+        }
+      });
+    }
+    document.querySelector('#password').addEventListener('keypress', function (e) {
+      if (e.key === 'Enter') {
+        login();
+      }
+    });
+  </script>
+</html>

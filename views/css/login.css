@@ -1,0 +1,71 @@
+body {
+  margin: 0;
+  background: url('/img/bg.jpg');
+  background-size: cover;
+}
+
+.login .box p {
+  font-weight: bolder;
+}
+
+.login {
+  width: 344px;
+  height: 344px;
+  background: var(--main-color);
+  margin: 0;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  -ms-transform: translate(-50%, -50%);
+  transform: translate(-50%, -50%);
+  text-align: center;
+  padding: 32px;
+  border-radius: 5px;
+}
+
+.login .box {
+  text-align: left;
+}
+
+.login .box input{
+  width: calc(100% - 32px - 1px);
+  height: 32px;
+  background-color: var(--info-bar-color);
+  border-radius: 2px;
+  border-color: var(--info-bar-border-color);
+  border-style: solid;
+  border-width: 1px;
+  color: var(--default-text-color);
+  padding: 0 16px;
+}
+
+.login .box input:focus {
+  outline:none;
+}
+
+.login .box input:hover {
+  outline:none;
+}
+
+.link {
+  margin-top: 2px;
+  margin-bottom: 16px;
+}
+
+.link a {
+  text-decoration: none;
+  font-weight: bold;
+  color: rgb(58,100,150);
+}
+
+.login .box input[type="button"]{
+  width: 100%;
+  height: 32px;
+  background-color: rgb(25, 44, 112);
+  border-radius: 2px;
+  border-style: none;
+  color: var(--default-text-color);
+  padding: 0 16px;
+  font-size: 16px;
+  color: white;
+}

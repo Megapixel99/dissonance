@@ -1,0 +1,15 @@
+:root {
+  --main-color: rgb(16, 18, 19);
+  --side-bar-color: rgb(22, 25, 26);
+  --info-bar-color: rgb(16, 18, 19);
+  --server-bar-color: rgb(30, 33, 34);
+  --server-info-color: rgb(22, 25, 26);
+  --text-input-color: rgb(26, 29, 30);
+  --info-bar-border-color: #828282;
+  --default-text-color: rgb(185, 187, 190);
+  --side-bar-width: 240px;
+  --server-bar-width: 72px;
+  --info-bar-height: 48px;
+  --input-cointainer-height: 68px;
+  color: var(--default-text-color);
+}

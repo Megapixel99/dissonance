@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <title>Dissonance</title>
+    <link href="/css/root.css" rel="stylesheet" />
+    <link href="/css/register.css" rel="stylesheet" />
+    <script src="/js/jquery-3.6.0.min.js"></script>
+  </head>
+  <body>
+    <div class="signup">
+      <h1>Create an Account</h1>
+      <p>Welcome to Dissonance!</p>
+      <div class="box">
+        <p>EMAIL</p>
+        <input id="email" type="email" value="">
+        <p>USERNAME</p>
+        <input id="username" type="text" value="">
+        <p>PASSWORD</p>
+        <input id="password" type="password" value="">
+        <input type="button" value="Continue" onclick="register()">
+        <p class="link"><a href="/login?redirect={{redirect}}">Already have an account?</a></p>
+      </div>
+    </div>
+  </body>
+  <script type="text/javascript">
+    function register() {
+      $.ajax({
+        url: "/register",
+        type: 'POST',
+        data: {
+          "email": document.getElementById('email').value,
+          "username": document.getElementById('username').value,
+          "password": document.getElementById('password').value,
+        },
+        success: function () {
+          location.pathname = '{{redirect}}'
+        },
+        error: function (err) {
+          console.log(err);
+        }
+      });
+      document.querySelector('#password').addEventListener('keypress', function (e) {
+        if (e.key === 'Enter') {
+          register();
+        }
+      });
+    }
+  </script>
+</html>

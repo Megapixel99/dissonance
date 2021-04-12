@@ -1,0 +1,293 @@
+body {
+  margin: 0px;
+  min-width: 600px;
+  overflow: hidden;
+}
+input:focus {
+  outline:none;
+}
+.channel-link {
+  width: calc(var(--side-bar-width) - 1vw);
+  margin-left: 0.5vw;
+  border-radius: 0.25vw;
+  background-color: inherit;
+  border-style: none;
+  font-weight: 500;
+  font-size: 16px;
+  color: var(--default-text-color);
+  text-align: left;
+  transition: background-color 300ms;
+  padding: 5px;
+  margin-top: 2px;
+}
+.user-info {
+  height: 50px;
+}
+.channel-link:hover {
+  cursor: pointer;
+  background-color: rgba(40, 40, 40, 1);
+  transition: background-color 300ms;
+}
+.info-bar {
+  background-color: var(--info-bar-color);
+  height: var(--info-bar-height);
+  width: 100vw;
+  border-bottom: var(--info-bar-border-color);
+  border-bottom-style: solid;
+  border-bottom-width: 0.5px;
+}
+.channel {
+  height: calc(100vh - var(--info-bar-height));
+  display: flex;
+  margin-left: var(--server-bar-width);
+  background-color: var(--main-color);
+}
+.server-list {
+  background-color: var(--server-bar-color);
+  width: var(--server-bar-width);
+  height: 100vh;
+  position: absolute;
+  left: 0;
+  top: 0;
+}
+.server-list-scroll {
+  overflow-y: scroll;
+  width: 100%;
+}
+.server-div {
+  height: 5px;
+  border-radius: 5px;
+  width: 40px;
+  margin-left: 15px;
+  background-color: var(--server-info-color);
+}
+.server-info {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: calc(var(--side-bar-width) - 15px);
+  height: var(--info-bar-height);
+  background-color: var(--server-info-color);
+  margin-left: var(--server-bar-width);
+  color: white;
+  font-size: large;
+  font-weight: bolder;
+  line-height: var(--info-bar-height);
+  padding-left: 15px;
+}
+.left-bar {
+  overflow-y: scroll;
+  position: relative;
+  background-color: var(--side-bar-color);
+  width: var(--side-bar-width);
+  flex-shrink: 0;
+  padding-top: 15px;
+}
+.input-container {
+  padding-top: 5px;
+  position: absolute;
+  bottom: 0;
+  width: calc(100% - (var(--server-bar-width) + var(--side-bar-width) + var(--side-bar-width)));
+  height: var(--input-cointainer-height);
+  margin-left: var(--side-bar-width);
+  background-color: var(--main-color)
+}
+.message {
+  width: 100%;
+  display: flex;
+  padding-bottom: 8.5px;
+  background-color: rgba(0, 0, 0, 0);
+  transition: background-color 300ms;
+}
+.message .text .username {
+  padding-top: 8.5px;
+  font-weight: bold;
+  color: white;
+}
+.message .text .user-text {
+  color: var(--default-text-color);
+}
+.message:hover {
+  background-color: rgba(40, 40, 40, 0.2);
+  transition: background-color 300ms;
+}
+.user-icon {
+  height: 40px;
+  width: 40px;
+  display: flex;
+  margin: 10px;
+  border: white 1px solid;
+  border-radius: 40px;
+}
+.user-icon img {
+  border-radius: 40px;
+}
+.user-icon-list {
+  border-radius: 35px;
+  width: 35px;
+  height: 35px;
+  display: inline;
+  line-height: 70px;
+  margin-right: 12px;
+}
+.dot {
+  height: 10px;
+  width: 10px;
+  background-color: #bbb;
+  border-radius: 50%;
+  position: relative;
+  right: 15px;
+  display: inline-block;
+}
+.text-container {
+  background-color: var(--text-input-color);
+  border-radius: 5px;
+  width: calc(100% - 2vw);
+  height: 44px;
+  margin-bottom: 24px;
+  display: flex;margin-left: 1vw;
+  margin-right: 1vw;
+}
+.main-content {
+  overflow-y: scroll;
+  position: relative;
+  background-color: var(--main-color);
+  flex: 1 1 auto;
+  margin-bottom: var(--input-cointainer-height);
+}
+.user-list {
+  overflow-y: scroll;
+  position: relative;
+  background-color: var(--side-bar-color);
+  width: var(--side-bar-width);
+  flex-shrink: 0;
+  padding: 10px;
+  width: 220px;
+}
+.server-icon img {
+  position: absolute;
+  width: 50px;
+  height: 50px;
+}
+.server-icon:hover {
+  background-color: rgb(25, 44, 112);
+  border-radius: 10px;
+  transition: background-color 300ms, border-radius 300ms;
+}
+.bottom:hover{
+  background-color: rgba(45, 131, 91);
+  border-radius: 10px;
+  transition: background-color 300ms, border-radius 300ms;
+}
+.text-input {
+  background-color: rgba(0, 0, 0, 0);
+  font-size: medium;
+  color: var(--default-text-color);
+  border-width: 0;
+  width: 100%;
+  padding: 0 16px;
+}
+.server-icon {
+  overflow: hidden;
+  position: relative;
+  height: 50px;
+  width: 50px;
+  border-radius: 50px;
+  background-color: var(--main-color);
+  margin-left: 10px;
+  margin-bottom: 10px;
+  transition: background-color 300ms, border-radius 600ms;
+  background-size: contain;
+  margin-top: 10px;
+  border-style: double;
+  border-color: white;
+  font-size: 21px;
+  text-align: center;
+  vertical-align: middle;
+  color: white;
+  line-height: 21px;
+}
+
+.dm-search-bar {
+  width: calc(100% - 26px);
+  border-radius: 2px;
+  background-color: #121415;
+  padding: 5px;
+}
+
+.add-user {
+  background-image: url("/img/user2-add-icon.png");
+  border: none;
+  position: absolute;
+  top: 10px;
+  left: 325px;
+  overflow: hidden;
+  height: 25px;
+  width: 25px;
+  background-size: contain;
+  background-color: transparent;
+}
+
+.tooltip-ex-bottom {
+ top: 40px;
+ left: 335px;
+ margin-left: -60px;
+}
+
+.tooltip-ex-text {
+ position: absolute;
+ width: 120px;
+ background-color: #555;
+ color: #fff;
+ text-align: center;
+ padding: 5px 0;
+ border-radius: 6px;
+ z-index: 1;
+ opacity: 0;
+ transition: opacity .6s;
+}
+
+.new-server {
+  height: 400px;
+  background: white;
+  margin: 0;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  -ms-transform: translate(-50%, -50%);
+  transform: translate(-50%, -50%);
+  text-align: center;
+  border-radius: 5px;
+}
+
+.new-sever-name {
+  width: calc(100% - 32px - 1px);
+  height: 32px;
+  border-radius: 2px;
+  border-color: var(--info-bar-border-color);
+  border-style: solid;
+  border-width: 1px;
+  text-align: center;
+  margin: 0 16px;
+}
+
+.new-server p {
+  color: black;
+  font-size: larger;
+}
+
+.new-server-confirm {
+  background-color: lightgray;
+  height: 40px;
+  padding: 15px;
+  border-radius: 0 0 5px 5px;
+  margin-top: 16px;
+}
+
+.new-server-confirm input {
+  height: 100%;
+  width: 80%;
+  border-radius: 5px;
+  border: none;
+  background-color: white;
+}
