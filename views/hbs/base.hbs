@@ -14,7 +14,7 @@
       <div class="server-div" > </div>
       <div id="server-list" class="server-list-scroll">
         {{#each servers}}
-          <input type="button" class="server-icon" style='background-image: url("/img/986-200x200.jpg");' onclick="changeView({{this.id}})"/>
+          <input type="button" class="server-icon" {{#if this.picture}}style='background-image: url("/img/986-200x200.jpg");'{{else}} value="{{nameAbriviation this.name}}" {{/if}} onclick="changeView({{this.id}})"/>
         {{/each}}
       </div>
       <div class="server-div" > </div>
@@ -99,6 +99,7 @@
     $.ajax({
       url: `/create/invite/${serverId}/${channelId}`,
       type: 'POST',
+
       success: function (data) {
         navigator.clipboard.writeText(data)
         .then(() => {
@@ -110,38 +111,50 @@
       },
     });
     }
+    $(document).mouseup(function (e) {
+      if (e.target.id === "new-server-bg") {
+        $("#new-server-bg").hide();
+      }
+    });
     function newServerInfo() {
-    // document.getElementsByTagName('body')[0].innerHTML += `<div id="new-server-bg" style="width: 100%; height: 100%; background-color: rgba(0,0,0,0.75);position: absolute;top: 0;left: 0;" onclick="hide(this)">
-    //   <div class="new-server">
-    //     <p style="font-size: 21px; color: black; font-weight: 700;">Create a new Server</p>
-    //     <p style="width: 334px;">Customize your server with a name and an icon. You might be able to change it later.</p>
-    //     <div style="display: flex; justify-content: center;">
-    //       <div style="position: relative;">
-    //         <img id="icon-upload" src="https://pic.onlinewebfonts.com/svg/img_234957.png" style="height: 96px; position: relative; width: 96px;">
-    //         <input type="file" accept="image/*" onchange="preview_image(event)" style="opacity: 0; position: absolute; top: 0px; left: 0px; width: 96px; height: 96px; cursor: pointer">
-    //       </div>
-    //     </div>
-    //     <p>Server Name</p>
-    //     <input class="new-sever-name" type="text" value="${user.info.profile.username}'s server'">
-    //     <div class="new-server-confirm">
-    //       <input type="button" value="Create Server" onclick="function hi(){console.log('hi');}">
-    //     </div>
-    //   </div>
-    // </div>`;
+      if (document.getElementById('new-server-bg')) {
+        $('#new-server-bg').show();
+      } else {
+        document.getElementsByTagName('body')[0].innerHTML += `<div id="new-server-bg" style="width: 100%; height: 100%; background-color: rgba(0,0,0,0.75);position: absolute;top: 0;left: 0;">
+          <div class="new-server">
+            <p style="font-size: 21px; color: black; font-weight: 700;">Create a new Server</p>
+            <p style="width: 334px;">Customize your server with a name. You might be able to change it later.</p>
+            <p>Server Name</p>
+            <input id="new-sever-name" class="new-sever-name" type="text" value="${user.info.profile.username}'s server">
+            <div class="new-server-confirm">
+              <input type="button" value="Create Server" onclick="newServer()">
+            </div>
+          </div>
+        </div>`;
+      }
+    }
+    function nameAbriviation(_name) {
+      let name = '';
+      _name.split(' ').forEach((i) => {name += i[0]});
+      return name;
     }
     function newServer() {
     $.ajax({
       url: `/create/server`,
       type: 'POST',
-      success: function (data) {
-        navigator.clipboard.writeText(data)
-        .then(() => {
-          document.getElementById('invite-tooltip').innerHTML = "Copied new invite link to clipboard";
-        })
-        .catch(err => {
-          document.getElementById('invite-tooltip').innerHTML = "Error while copying new invite link";
-        });
+      data: {
+        "name": document.getElementById('new-sever-name').value,
       },
+      success: function (data) {
+        if (data.picture) {
+        document.getElementById('server-list').innerHTML += `<input type="button" class="server-icon" style='background-image: url("${data.picture}");' onclick="changeView(${data.id})"/>`
+        } else {
+        document.getElementById('server-list').innerHTML += `<input type="button" class="server-icon" value="${nameAbriviation(data.name)}" onclick="changeView(${data.id})"/>`
+        }
+        $("#new-server-bg").hide();
+      }, error: function (err) {
+        console.error(err);
+      }
     });
     }
     function showTooltip() {
