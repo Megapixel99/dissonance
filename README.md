@@ -15,15 +15,17 @@ Screenshot(s):
  - [x] Two channels
  - [x] Invite new users to a server
  - [x] Realtime communication
+ - [x] Create Servers
 
 ## Future (planned) Features
 
- - [ ] Create Servers
  - [ ] Create Channels
  - [ ] Direct Messaging System
  - [ ] Role System
  - [ ] Configurable Servers
  - [ ] Modify your information (as a user)
+ - [ ] Leave Servers
+ - [ ] Delete Servers
 
 ## Setup
 

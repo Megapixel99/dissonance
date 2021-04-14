@@ -22,6 +22,11 @@ handlebars.registerHelper('ifBoth', function (arg1, arg2, options) {
 handlebars.registerHelper('ifEither', function (arg1, arg2, options) {
   return (arg1 || arg2) ? options.fn(this) : options.inverse(this);
 });
+handlebars.registerHelper('nameAbriviation', function (_name) {
+  let name = '';
+  _name.split(' ').forEach((i) => {name += i[0]});
+  return name;
+});
 handlebars.registerHelper({
   eq: (v1, v2) => v1 === v2,
   ne: (v1, v2) => v1 !== v2,
@@ -135,10 +140,11 @@ router.post('/register', (req, res) => {
 router.post('/create/server', upload.single('photo'), (req, res) => {
   if (req.session.user) {
     const imagePath = null;
-    if (req.file !== null && req.file !== undefined && req.file.mimetype.includes('image')) {
-      // imagePath = path.join('/img/', data.uuid) + path.extname(req.file.originalname);
-    }
+    // if (req.file !== null && req.file !== undefined && req.file.mimetype.includes('image')) {
+    //   imagePath = path.join('/img/', data.uuid) + path.extname(req.file.originalname);
+    // }
     functions.create.server(req.body.name, imagePath, req.session.user).then((server) => {
+      req.session.user.servers.push(server);
       res.status(201).json(server);
     }).catch((err) => {
       res.sendStatus(500);
@@ -172,6 +178,7 @@ router.get('/channels/:server', async (req, res) => {
 router.get('/channels/:server/:channel', async (req, res) => {
   if (req.session.user) {
     const template = handlebars.compile(fs.readFileSync(path.resolve('views/hbs/base.hbs')).toString());
+    console.log(req.session.user.servers);
     const server = req.session.user.servers.find((e) => e.id === Number(req.params.server));
     res.send(template({
       servers: req.session.user.servers,
@@ -197,7 +204,7 @@ router.get('/channels/:server/:channel/messages', async (req, res) => {
           channel.messages[i].username = info.profile.username;
           channel.messages[i].picture = info.profile.picture;
         } else {
-          channel.messages[i].username = 'User that is no longer with us';
+          channel.messages[i].username = '[ deleted user ]';
           channel.messages[i].picture = '/img/avatars/deleted.png';
         }
       }

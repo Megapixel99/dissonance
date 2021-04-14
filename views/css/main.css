@@ -43,6 +43,7 @@ input:focus {
   background-color: var(--main-color);
 }
 .server-list {
+  overflow-y: scroll;
   background-color: var(--server-bar-color);
   width: var(--server-bar-width);
   height: 100vh;
@@ -51,7 +52,6 @@ input:focus {
   top: 0;
 }
 .server-list-scroll {
-  overflow-y: scroll;
   width: 100%;
 }
 .server-div {
@@ -248,7 +248,6 @@ input:focus {
 }
 
 .new-server {
-  height: 400px;
   background: white;
   margin: 0;
   position: absolute;
