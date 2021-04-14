@@ -13,7 +13,7 @@ module.exports = {
         id,
         name,
         picture,
-        users: (user !== null ? [{ id: user.id, nickname: null }] : []),
+        users: (user !== null ? [{ id: user.info.id, nickname: null }] : []),
         channels: [{
           name: 'general',
           id: Number(`${uuid()}${uuid()}`),
