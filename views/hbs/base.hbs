@@ -179,6 +179,21 @@
         </div>
       </div>`;
     }
+    function userListIcon(user) {
+      return `<div class="user-info">
+          <div style="height: inherit;">
+          <div class="user-icon-list">
+            <img src="${user.profile.picture}" style="width: inherit; height: inherit; border-radius: inherit; border: white 1px solid;">
+            <span id="${user.id}-active-dot" class="dot" ${activeUserIds.includes(user.id) ? 'style="background-color: aqua"':''}></span>
+          </div>
+          ${user.profile.status ? `<div style="display: initial; position: absolute;">
+            <p style="font-size: 16px; margin-top: 5px; margin-bottom: 0;">${user.profile.username}</p>
+            <p style="font-size: 10px; margin: 0px;">${user.profile.status}</p>
+          </div>` : `<p style="display: initial; position: absolute; font-size: 16px; line-height: 10px;">${user.profile.username}</p>`
+          }
+        </div>
+      </div>`;
+    }
     function setUpChannels(_serverId) {
       document.getElementById('user-list').innerHTML = "";
       if (serverId !== "@me") {
@@ -193,20 +208,7 @@
             `<input class="channel-link" type="button" id="${data.server.channels[i].id}" value="#  ${data.server.channels[i].name}" onclick="changeView(${_serverId}, ${data.server.channels[i].id})">`
           }
           for (let i = 0; i < data.users.length; i++) {
-            document.getElementById('user-list').innerHTML +=
-            `<div class="user-info">
-                <div style="height: inherit;">
-                <div class="user-icon-list">
-                  <img src="${data.users[i].profile.picture}" style="width: inherit; height: inherit; border-radius: inherit; border: white 1px solid;">
-                  <span id="${data.users[i].id}-active-dot" class="dot" ${activeUserIds.includes(data.users[i].id) ? 'style="background-color: aqua"':''}></span>
-                </div>
-                ${data.users[i].profile.status ? `<div style="display: initial; position: absolute;">
-                  <p style="font-size: 16px; margin-top: 5px; margin-bottom: 0;">${data.users[i].profile.username}</p>
-                  <p style="font-size: 10px; margin: 0px;">${data.users[i].profile.status}</p>
-                </div>` : `<p style="display: initial; position: absolute; font-size: 16px; line-height: 10px;">${data.users[i].profile.username}</p>`
-                }
-              </div>
-            </div>`
+            document.getElementById('user-list').innerHTML += userListIcon(data.users[i]);
           }
         },
       });
@@ -271,13 +273,19 @@
       socket.on('new user connected', (_user) => {
         if (serverId !== "@me") {
           activeUserIds.push(_user.id);
-          document.getElementById(`${_user.id}-active-dot`).style['background-color'] = 'aqua';
+          if (document.getElementById(`${_user.id}-active-dot`)) {
+            document.getElementById(`${_user.id}-active-dot`).style['background-color'] = 'aqua';
+          } else {
+            userListIcon(_user);
+          }
         }
       });
       socket.on('user disconnected', (_user) => {
         if (serverId !== "@me") {
           activeUserIds = activeUserIds.filter(e => e !== _user.id);
-          document.getElementById(`${_user.id}-active-dot`).style['background-color'] = '#bbb';
+          if (document.getElementById(`${_user.id}-active-dot`)) {
+            document.getElementById(`${_user.id}-active-dot`).style['background-color'] = '#bbb';
+          }
         }
       });
       socket.on('user info', (data) => {
