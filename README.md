@@ -1,23 +1,21 @@
 # Dissonance
 
-Basic Discord clone [WIP]
+A real-time chat app modeled on Discord, built in April 2021 with Node.js,
+Socket.IO, MongoDB and Handlebars. It is no longer maintained, and the hosted
+demo that used to run at dissonance.page is offline.
 
-Pull Requests are welcome!
+![A Dissonance server with its channel list and chat](ScreenShot1.png)
 
-View it live at: https://dissonance.page/join/PGwQuWer
+## What works
 
-Screenshot(s):
+ - Creating servers
+ - Inviting users to a server by link
+ - Real-time messaging over WebSockets
+ - Two channels per server
 
-![Server Picture](ScreenShot1.png)
+## Never built
 
-## Current Features
-
- - [x] Two channels
- - [x] Invite new users to a server
- - [x] Realtime communication
- - [x] Create Servers
-
-## Future (planned) Features
+These were planned when development stopped:
 
  - [ ] Create Channels
  - [ ] Direct Messaging System
@@ -41,9 +39,9 @@ $ npm i --save
 
 ### How to configure the environment variables
 
-1. Create a `.env` file, by renaming the provided `.sample.env`
-2. Add the MongoDB connection url, port, environment name, and other secrets to
-the `.env` file
+Create a `.env` file at the root of the project. The server reads these
+variables: `MONGO_URL`, `PORT`, `ENV`, `SESSION_SECRET`, `TIMEZONE`,
+`HTTP_ONLY`, `CERT_FULL_CHAIN_PATH` and `CERT_PRIVATE_KEY_PATH`.
 
 If you set `ENV` to `prod`, you will need to set up a https certificate via
 `CERT_FULL_CHAIN_PATH` and `CERT_PRIVATE_KEY_PATH`
@@ -75,7 +73,7 @@ $ docker build --tag  dissonance .
 
 In your Terminal or Command Prompt, run the following to run the server, which
 will expose the service on port 3000
-if you have the a `.env` file:
+if you have a `.env` file:
 
 ```
 $ docker run -t -p 3000:3000 --env-file ./.env dissonance
